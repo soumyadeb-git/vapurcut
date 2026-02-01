@@ -23,244 +23,197 @@
   <style>
     :root {
       --white: #ffffff;
-      --app-bg: #fbfbfd;
+      --app-bg: #f5f5f7;
       --black: #000000;
-      --near-black: #1d1d1f;
+      --text: #1d1d1f;
       --grey: #86868b;
       --accent: #0071e3;
-      --radius-pro: 32px;
-      --radius-mobile: 24px;
-      --nav-height: 54px;
+      --radius: 32px;
+      --nav-height: 60px;
     }
 
-    /* --- RESET & BASE --- */
+    /* --- RESET --- */
     * { box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     
     body {
       background-color: var(--white);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
-      color: var(--near-black);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      color: var(--text);
       overflow-x: hidden;
       line-height: 1.5;
-      font-size: 16px;
     }
 
+    a { text-decoration: none; color: inherit; -webkit-tap-highlight-color: transparent; }
     img { max-width: 100%; display: block; }
-    a { -webkit-tap-highlight-color: transparent; }
 
-    /* --- RESPONSIVE TYPOGRAPHY --- */
-    h1 { font-size: clamp(2.5rem, 8vw, 5rem); line-height: 1.05; letter-spacing: -0.04em; }
-    h2 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spacing: -0.03em; }
-    h3 { font-size: clamp(1.5rem, 3vw, 1.8rem); line-height: 1.2; }
-    p.lead { font-size: clamp(1.1rem, 2vw, 1.5rem); color: var(--grey); line-height: 1.4; }
-    p { font-size: clamp(1rem, 1.5vw, 1.25rem); color: var(--near-black); line-height: 1.6; }
+    /* --- FLUID TYPOGRAPHY --- */
+    h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1.05; letter-spacing: -0.04em; font-weight: 700; }
+    h2 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 700; }
+    h3 { font-size: clamp(1.2rem, 3vw, 1.8rem); line-height: 1.2; font-weight: 700; }
+    p { font-size: clamp(1rem, 1.2vw, 1.15rem); color: var(--text); line-height: 1.6; }
+    .lead { font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--grey); line-height: 1.4; }
 
-    /* --- NAVIGATION --- */
+    /* --- NAVIGATION (The Critical Part) --- */
     header {
       position: fixed; top: 0; width: 100%; z-index: 1000;
-      background: rgba(255, 255, 255, 0.8); backdrop-filter: saturate(180%) blur(20px);
+      background: rgba(255, 255, 255, 0.85); 
+      backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px); 
       border-bottom: 1px solid rgba(0,0,0,0.05);
     }
+    
     .nav-container { 
-      height: var(--nav-height); max-width: 1200px; margin: 0 auto; padding: 0 max(20px, 5vw); 
+      height: var(--nav-height); max-width: 1100px; margin: 0 auto; padding: 0 24px; 
       display: flex; align-items: center; justify-content: space-between; 
     }
-    .logo-link { font-weight: 700; font-size: 1.2rem; text-decoration: none; color: var(--near-black); z-index: 1100; }
-    
-    /* Desktop Nav */
-    .nav-links { display: flex; align-items: center; gap: 32px; }
-    .nav-links a { color: var(--grey); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--black); }
-    .btn-nav { background: var(--black); color: var(--white) !important; padding: 8px 18px; border-radius: 100px; transition: transform 0.2s; }
-    .btn-nav:hover { transform: scale(1.05); }
 
-    /* Mobile Toggle */
-    .menu-toggle { display: none; border: none; background: transparent; cursor: pointer; padding: 10px; z-index: 1100; margin-right: -10px; }
-    .hamburger-icon { width: 22px; height: 1.5px; background: var(--black); position: relative; transition: all 0.3s; }
-    .hamburger-icon::before, .hamburger-icon::after { content: ''; width: 22px; height: 1.5px; background: var(--black); position: absolute; left: 0; transition: transform 0.3s ease; }
-    .hamburger-icon::before { top: -6px; }
-    .hamburger-icon::after { bottom: -6px; }
+    .brand { font-weight: 700; font-size: 1.25rem; letter-spacing: -0.02em; z-index: 1100; }
+
+    /* Desktop Nav Links (Hidden by default on mobile) */
+    .desktop-nav { display: none; align-items: center; gap: 32px; }
+    .desktop-nav a { font-size: 0.9rem; font-weight: 500; color: var(--grey); transition: color 0.2s; }
+    .desktop-nav a:hover { color: var(--black); }
+    .btn-small { background: var(--black); color: var(--white) !important; padding: 8px 18px; border-radius: 999px; }
+
+    /* Hamburger Button (Visible by default on mobile) */
+    .menu-btn { display: block; border: none; background: transparent; padding: 10px; z-index: 1100; cursor: pointer; margin-right: -10px; }
+    .bar { width: 22px; height: 1.5px; background: var(--black); position: relative; transition: all 0.3s; }
+    .bar::before, .bar::after { content: ''; width: 22px; height: 1.5px; background: var(--black); position: absolute; left: 0; transition: transform 0.3s; }
+    .bar::before { top: -6px; }
+    .bar::after { bottom: -6px; }
 
     /* Mobile Drawer */
-    .mobile-menu { 
-      position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-      background: rgba(255,255,255,0.98); backdrop-filter: blur(10px);
+    .mobile-drawer {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: var(--white); padding: 100px 40px;
+      display: flex; flex-direction: column; gap: 30px;
       opacity: 0; visibility: hidden; pointer-events: none;
-      display: flex; flex-direction: column; justify-content: center; padding: 40px; 
-      transition: opacity 0.4s ease; z-index: 1050; 
+      transition: all 0.4s ease; z-index: 1050;
     }
-    .mobile-menu a { 
-      font-size: 2rem; font-weight: 700; color: var(--near-black); text-decoration: none; 
-      margin-bottom: 2rem; transform: translateY(20px); opacity: 0; transition: 0.4s ease; 
-    }
+    .mobile-drawer a { font-size: 2rem; font-weight: 700; opacity: 0; transform: translateY(20px); transition: 0.4s; }
 
     /* Menu Open State */
     body.menu-open { overflow: hidden; }
-    body.menu-open .mobile-menu { opacity: 1; visibility: visible; pointer-events: auto; }
-    body.menu-open .mobile-menu a { opacity: 1; transform: translateY(0); }
-    body.menu-open .hamburger-icon { background: transparent; }
-    body.menu-open .hamburger-icon::before { transform: translateY(6px) rotate(45deg); }
-    body.menu-open .hamburger-icon::after { transform: translateY(-6px) rotate(-45deg); }
+    body.menu-open .mobile-drawer { opacity: 1; visibility: visible; pointer-events: auto; }
+    body.menu-open .mobile-drawer a { opacity: 1; transform: translateY(0); }
+    body.menu-open .bar { background: transparent; }
+    body.menu-open .bar::before { transform: translateY(6px) rotate(45deg); }
+    body.menu-open .bar::after { transform: translateY(-6px) rotate(-45deg); }
 
-    /* --- HERO SECTION --- */
+    /* --- HERO --- */
     .hero { 
-      padding: calc(var(--nav-height) + 80px) 24px 60px; 
-      text-align: center; max-width: 1000px; margin: 0 auto; 
+      padding: 160px 24px 80px; text-align: center; 
+      max-width: 900px; margin: 0 auto; 
     }
-    .hero h1 { margin-bottom: 24px; }
-    .hero p { max-width: 600px; margin: 0 auto 40px; }
     .btn-hero { 
-      background: var(--black); color: var(--white); text-decoration: none; 
-      padding: 18px 40px; border-radius: 100px; font-weight: 600; font-size: 1.1rem; 
-      display: inline-block; transition: transform 0.2s; 
+      display: inline-block; background: var(--black); color: var(--white); 
+      padding: 16px 36px; border-radius: 999px; font-weight: 600; font-size: 1.1rem;
+      margin-top: 30px; transition: transform 0.2s;
     }
     .btn-hero:hover { transform: scale(1.03); }
 
-    /* --- RESPONSIVE DEVICE MOCKUP --- */
-    .preview-container { 
-      padding: 0 24px 80px; display: flex; justify-content: center; 
+    /* --- PREVIEW --- */
+    .preview-stage { padding: 0 24px 100px; display: flex; justify-content: center; }
+    .device-mock {
+      width: 100%; max-width: 340px; aspect-ratio: 9/19;
+      background: #000; border-radius: 50px; padding: 12px;
+      box-shadow: 0 50px 100px -20px rgba(0,0,0,0.25);
+      position: relative; border: 1px solid #333;
     }
-    .device-frame {
-      width: 100%; 
-      max-width: 320px; /* Cap width on large screens */
-      width: min(320px, 85vw); /* Responsive width for mobile */
-      aspect-ratio: 9/19; 
-      background: #000; border-radius: min(50px, 12vw); 
-      padding: 10px; position: relative;
-      box-shadow: 0 40px 80px -10px rgba(0,0,0,0.2); 
-      border: 1px solid #333; margin: 0 auto;
-    }
-    .dynamic-island { 
-      position: absolute; top: 20px; left: 50%; transform: translateX(-50%); 
-      width: 25%; height: 26px; background: #000; border-radius: 20px; z-index: 50; 
-    }
-    .screen-area { 
-      width: 100%; height: 100%; background: #fff; 
-      border-radius: min(40px, 10vw); overflow: hidden; position: relative; 
-    }
-    .comp-layers { width:100%; height:100%; position:relative; }
-    
+    .island { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); width: 30%; height: 26px; background: #000; border-radius: 20px; z-index: 20; }
+    .screen { width: 100%; height: 100%; background: #fff; border-radius: 40px; overflow: hidden; position: relative; }
     .layer { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .layer-bg { background: url('https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-bg.jpg') center/cover; }
-    .layer-fg { 
+    .bg-layer { background: url('https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-bg.jpg') center/cover; }
+    .fg-layer { 
       z-index: 2; clip-path: inset(0 0 0 50%); 
       background: white radial-gradient(#d1d1d1 0.5px, transparent 0.5px) 0 0/12px 12px; 
     }
-    .layer-fg img { width: 100%; height: 100%; object-fit: cover; }
-    .slider-handle { 
-      position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; 
-      background: #fff; z-index: 10; box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-    .range-trigger { position: absolute; inset: 0; opacity: 0; z-index: 20; cursor: ew-resize; width: 100%; height: 100%; }
+    .fg-layer img { width: 100%; height: 100%; object-fit: cover; }
+    .slider-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: #fff; z-index: 10; box-shadow: 0 0 15px rgba(0,0,0,0.3); }
+    .range-input { position: absolute; inset: 0; opacity: 0; z-index: 30; cursor: ew-resize; width: 100%; height: 100%; }
 
-    /* --- RESPONSIVE BENTO GRID --- */
-    .bento-grid { 
-      max-width: 1100px; margin: 0 auto 100px; padding: 0 24px; 
-      display: grid; gap: 24px; 
-      /* Mobile First: 1 Column */
-      grid-template-columns: 1fr;
+    /* --- BENTO GRID --- */
+    .bento { 
+      display: grid; gap: 24px; padding: 0 24px 100px; 
+      max-width: 1100px; margin: 0 auto; 
+      grid-template-columns: 1fr; /* Default Mobile */
     }
-
     .card { 
-      background: var(--app-bg); border-radius: var(--radius-mobile); padding: 30px; 
-      position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; 
-      min-height: 320px; /* Ensure height on mobile */
+      background: var(--app-bg); border-radius: var(--radius); padding: 40px; 
+      min-height: 340px; display: flex; flex-direction: column; justify-content: flex-end; 
+      position: relative; overflow: hidden;
     }
     .card-dark { background: var(--black); color: #fff; }
-    .card-center { text-align: center; align-items: center; justify-content: center; padding: 60px 30px; }
-
-    .card h3 { margin-bottom: 12px; font-weight: 700; z-index: 2; }
-    .card p { color: var(--grey); z-index: 2; }
     .card-dark p { color: rgba(255,255,255,0.7); }
+    .icon { font-size: 3rem; margin-bottom: 20px; }
+    .glow { position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.15; }
 
-    /* Decor Elements */
-    .decor-glow { position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.15; }
-    .decor-icon { position: absolute; top: 30px; right: 30px; font-size: 2.5rem; opacity: 0.8; }
-    .decor-bg { position: absolute; inset: 0; background: url('https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-subject.jpg') center/cover; opacity: 0.04; }
-
-    /* --- SEO CONTENT --- */
-    .content-wrapper { max-width: 800px; margin: 0 auto; padding: 0 24px 100px; }
-    .content-wrapper h2 { margin: 60px 0 24px; }
-    .content-wrapper p { margin-bottom: 24px; }
+    /* --- CONTENT --- */
+    .article { max-width: 800px; margin: 0 auto; padding: 0 24px 100px; }
+    .article h2 { margin: 60px 0 24px; }
+    .article p { margin-bottom: 24px; }
 
     /* --- FOOTER --- */
-    footer { padding: 80px 24px; text-align: center; background: var(--app-bg); border-top: 1px solid rgba(0,0,0,0.05); }
-    footer p { font-size: 0.9rem; color: var(--grey); }
+    footer { padding: 80px 24px; text-align: center; background: var(--app-bg); border-top: 1px solid #eee; font-size: 0.9rem; color: var(--grey); }
 
-    /* --- LIQUID LOADING --- */
-    #loader { position: fixed; inset: 0; background: var(--white); z-index: 5000; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s; }
-    .goo-filter { filter: url('#goo'); width: 200px; height: 200px; position: relative; display: flex; align-items: center; justify-content: center; }
+    /* --- SPLASH SCREEN --- */
+    #splash { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s; }
+    .goo-wrap { filter: url('#goo'); width: 200px; height: 200px; position: relative; display: flex; align-items: center; justify-content: center; }
     .dot { position: absolute; width: 80px; height: 80px; background: var(--black); border-radius: 50%; animation: orbit 3s infinite ease-in-out; }
     .dot-2 { background: var(--accent); width: 60px; height: 60px; animation-delay: -1.5s; }
     @keyframes orbit { 0%, 100% { transform: translate(0,0) scale(1); } 50% { transform: translate(50px, -20px) scale(0.9); } }
-    .loader-brand { position: absolute; font-weight: 800; font-size: 1.5rem; color: #fff; mix-blend-mode: difference; }
-    body.loaded #loader { opacity: 0; visibility: hidden; }
+    .splash-text { position: absolute; font-weight: 800; font-size: 1.5rem; color: #fff; mix-blend-mode: difference; }
+    body.loaded #splash { opacity: 0; visibility: hidden; }
 
-    /* =========================================
-       MEDIA QUERIES (The "Every Angle" Logic)
-       ========================================= */
+    /* --- RESPONSIVE BREAKPOINTS (The Fix) --- */
     
-    /* Tablet Portrait & Large Phones (≥ 600px) */
-    @media (min-width: 600px) {
-      .bento-grid { 
-        grid-template-columns: repeat(2, 1fr); /* 2 Columns */
-      }
-      .card-wide-tablet { grid-column: span 2; } /* Full width on tablet */
-      .card { border-radius: var(--radius-pro); }
-    }
-
-    /* Desktop (≥ 900px) */
-    @media (min-width: 900px) {
-      .menu-toggle { display: none; } /* Hide Hamburger */
-      .nav-links { display: flex; } /* Show Links */
+    /* At 768px (Tablet/Desktop), switch nav and grid */
+    @media (min-width: 768px) {
+      .desktop-nav { display: flex; } /* Show Links */
+      .menu-btn { display: none; }    /* Hide Hamburger */
       
-      .bento-grid { 
-        grid-template-columns: repeat(12, 1fr); /* 12 Columns Complex Layout */
-      }
-      .card-mid { grid-column: span 7; }
-      .card-small { grid-column: span 5; }
-      .card-full { grid-column: span 12; padding: 100px; }
-      
-      .card { min-height: 400px; } /* Taller cards on desktop */
+      .bento { grid-template-columns: repeat(12, 1fr); }
+      .span-7 { grid-column: span 7; }
+      .span-5 { grid-column: span 5; }
+      .span-12 { grid-column: span 12; align-items: center; text-align: center; padding: 80px; }
     }
-
   </style>
 </head>
 <body>
 
-  <!-- Loading Screen -->
-  <div id="loader">
-    <div class="goo-filter">
+  <!-- 1. Splash Screen -->
+  <div id="splash">
+    <div class="goo-wrap">
       <div class="dot"></div>
       <div class="dot dot-2"></div>
-      <div class="loader-brand">VapurCut</div>
+      <div class="splash-text">VapurCut</div>
     </div>
   </div>
-  <svg style="display:none;"><filter id="goo"><feGaussianBlur stdDeviation="12" /><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 20 -10" /></filter></svg>
+  <svg style="display:none;"><filter id="goo"><feGaussianBlur stdDeviation="12"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 20 -10"/></filter></svg>
 
+  <!-- 2. Responsive Header -->
   <header>
     <div class="nav-container">
-      <a href="#" class="logo-link">VapurCut</a>
+      <a href="#" class="brand">VapurCut</a>
       
-      <!-- Desktop Links -->
-      <nav class="nav-links">
-        <a href="#features">Features</a>
+      <!-- Visible only on Desktop/Tablet -->
+      <nav class="desktop-nav">
+        <a href="#how">Features</a>
         <a href="#privacy">Privacy</a>
         <a href="#support">Support</a>
-        <a href="#" class="btn-nav">Download</a>
+        <a href="#" class="btn-small">Download</a>
       </nav>
 
-      <!-- Mobile Hamburger -->
-      <button class="menu-toggle" id="menuBtn" aria-label="Toggle Menu">
-        <div class="hamburger-icon"></div>
+      <!-- Visible only on Mobile -->
+      <button class="menu-btn" id="menuToggle" aria-label="Menu">
+        <div class="bar"></div>
       </button>
     </div>
 
-    <!-- Mobile Overlay -->
-    <div class="mobile-menu">
-      <a href="#features">Features</a>
+    <!-- Mobile Drawer Overlay -->
+    <div class="mobile-drawer" id="mobileDrawer">
+      <a href="#how">Features</a>
       <a href="#privacy">Privacy</a>
       <a href="#support">Support</a>
       <a href="#" style="color:var(--accent);">Download App</a>
@@ -268,92 +221,91 @@
   </header>
 
   <main>
+    <!-- 3. Hero -->
     <section class="hero">
       <h1>Private background removal.<br>Instant results.</h1>
-      <p class="lead">Powerful on-device AI that works offline. Secure, fast, and professional-grade quality for Android.</p>
-      <a href="#" class="btn-hero">Download Free</a>
+      <p class="lead">Powerful on-device AI that keeps your photos on your device. Fast, secure, and professional-grade quality for Android.</p>
+      <a href="#" class="btn-hero">Download for Free</a>
     </section>
 
-    <!-- Responsive Preview -->
-    <section class="preview-container">
-      <div class="device-frame">
-        <div class="dynamic-island"></div>
-        <div class="screen-area">
-          <div class="comp-layers">
-            <div class="layer layer-bg"></div>
-            <div class="layer layer-fg" id="fg">
-              <img src="https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-subject.jpg" alt="Subject">
-            </div>
-            <div class="slider-handle" id="handle"></div>
-            <input type="range" min="0" max="100" value="50" class="range-trigger" id="slider">
+    <!-- 4. Interactive Preview -->
+    <section class="preview-stage">
+      <div class="device-mock">
+        <div class="island"></div>
+        <div class="screen">
+          <div class="layer bg-layer"></div>
+          <div class="layer fg-layer" id="fg">
+            <img src="https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-subject.jpg" alt="AI Cutout">
           </div>
+          <div class="slider-handle" id="handle"></div>
+          <input type="range" min="0" max="100" value="50" class="range-input" id="slider">
         </div>
       </div>
     </section>
 
-    <!-- Responsive Bento Grid -->
-    <section id="features" class="bento-grid">
-      <!-- Card 1: Privacy -->
-      <div class="card card-mid card-wide-tablet">
-        <div class="decor-glow"></div>
-        <div class="decor-icon">🔒</div>
+    <!-- 5. Bento Features -->
+    <section id="how" class="bento">
+      <!-- Privacy -->
+      <div class="card span-7">
+        <div class="glow"></div>
+        <div class="icon">🔒</div>
         <h3>Privacy First. Always.</h3>
         <p>VapurCut utilizes your phone's Neural Processing Unit (NPU). Your photos are processed in a local sandbox, ensuring zero data leakage.</p>
       </div>
 
-      <!-- Card 2: Offline -->
-      <div class="card card-small card-dark">
-        <div class="decor-icon" style="color:#fff;">📡</div>
+      <!-- Offline -->
+      <div class="card span-5 card-dark">
+        <div class="icon">📡</div>
         <h3>100% Offline</h3>
         <p>Zero latency. Remove backgrounds in flight, in remote areas, or anywhere without a data connection.</p>
       </div>
 
-      <!-- Card 3: Quality -->
-      <div class="card card-full card-center">
-        <div class="decor-bg"></div>
-        <div style="z-index:2; max-width:700px;">
+      <!-- Quality -->
+      <div class="card span-12">
+        <div style="position:absolute; inset:0; background:url('https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-subject.jpg') center/cover; opacity:0.05;"></div>
+        <div style="z-index:2; max-width:600px;">
           <h3>Superior Edge Quality</h3>
           <p>Our proprietary AI segmentation technology handles difficult subjects—hair, fur, and transparency—with surgical precision.</p>
-          <div style="margin-top:20px; font-weight:700; color:var(--accent); font-size:0.9rem; display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
-            <span>PRO SHARPNESS</span> <span>•</span> <span>NATURAL FEATHER</span>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- SEO Content -->
-    <article class="content-wrapper">
-      <h2 id="privacy">The Privacy Standard</h2>
+    <!-- 6. Full Content -->
+    <article id="privacy" class="article">
+      <h2>The Privacy Standard</h2>
       <p>VapurCut redefines background removal by keeping 100% of the processing on your Android device. Traditional tools upload your photos to cloud servers, where they can be stored or analyzed. VapurCut uses local Neural Engine acceleration to ensure your photos never leave your hand.</p>
       
       <p>This "Local-First" approach is the future of mobile photography. By leveraging the specialized AI cores found in modern Android chipsets, VapurCut achieves studio-quality results in less than 2 seconds without requiring an internet connection.</p>
 
-      <h2>Studio Precision</h2>
-      <p>The secret to a professional cutout is the edge. Our semantic segmentation AI identifies complex subjects—like hair, fur, and delicate textures—with surgical precision. This ensures that your subjects blend naturally into any new background.</p>
+      <h2>Designed for Workflow</h2>
+      <p>Speed is the ultimate luxury for modern creators. By eliminating the upload/download cycle, VapurCut allows you to process dozens of images in the time it would take a web-based tool to handle just one. For professionals handling high volumes of photography, this is a productivity multiplier.</p>
+
+      <h2>Ethics of Data</h2>
+      <p>We believe that "free" tools shouldn't mean your data is the product. VapurCut is developed with a strict no-analytics, no-tracking policy. We do not require account sign-ups because we do not need to know who you are to help you edit your photos.</p>
     </article>
   </main>
 
+  <!-- 7. Footer -->
   <footer>
     <p>© 2026 VapurCut • Privacy by Design. Designed for Android.</p>
     <div style="margin-top:20px;">
-      <a href="privacy-policy.html" style="color:var(--grey); text-decoration:none; margin:0 10px;">Privacy Policy</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
     </div>
   </footer>
 
   <script>
-    // 1. Mobile Menu Logic
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
-    
-    menuBtn.addEventListener('click', () => {
+    // Toggle Mobile Menu
+    const toggle = document.getElementById('menuToggle');
+    toggle.addEventListener('click', () => {
       document.body.classList.toggle('menu-open');
     });
-    
-    mobileMenuLinks.forEach(link => {
+
+    // Close Menu on Link Click
+    document.querySelectorAll('.mobile-drawer a').forEach(link => {
       link.addEventListener('click', () => document.body.classList.remove('menu-open'));
     });
 
-    // 2. Slider Logic
+    // Slider Interaction
     const slider = document.getElementById('slider');
     const fg = document.getElementById('fg');
     const handle = document.getElementById('handle');
@@ -364,17 +316,16 @@
       handle.style.left = `${v}%`;
     });
 
-    // 3. Startup Logic
+    // Startup Animation
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.body.classList.add('loaded');
-        
-        // Auto-hint animation for slider
+        // Slider Hint
         setTimeout(() => {
-          fg.style.transition = 'clip-path 1.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
-          handle.style.transition = 'left 1.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
-          fg.style.clipPath = `inset(0 0 0 35%)`;
-          handle.style.left = `35%`;
+          fg.style.transition = 'clip-path 1.2s ease';
+          handle.style.transition = 'left 1.2s ease';
+          fg.style.clipPath = 'inset(0 0 0 35%)';
+          handle.style.left = '35%';
           setTimeout(() => {
             fg.style.transition = 'none';
             handle.style.transition = 'none';
