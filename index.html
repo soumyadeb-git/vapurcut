@@ -3,241 +3,299 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VapurCut — Private On-Device Intelligence</title>
   
+  <!-- Primary SEO Meta Tags -->
+  <title>VapurCut — Private On-Device Background Remover</title>
+  <meta name="description" content="Remove photo backgrounds instantly on your Android device with powerful on-device AI. 100% private, offline, and secure. Your photos never leave your device." />
+  <meta name="keywords" content="background remover, offline photo editor, privacy first AI, android background removal, transparent png, on-device machine learning" />
+  <link rel="canonical" href="https://soumyadeb-git.github.io/vapurcut/" />
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="VapurCut — Professional Background Removal" />
+  <meta property="og:description" content="100% Private on-device AI background remover. No uploads. No tracking." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/soumyadeb-git/vapurcut/main/assets/og-preview.jpg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="VapurCut — Private On-Device AI" />
+  <meta name="twitter:description" content="The privacy-first standard for background removal on Android." />
+
+  <!-- SEO Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "VapurCut",
+    "operatingSystem": "Android",
+    "applicationCategory": "PhotoEditor",
+    "description": "Professional background remover using on-device AI for total privacy.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
   <style>
     :root {
       --white: #ffffff;
-      --app-bg: #f5f5f7;
+      --app-bg: #fbfbfd;
       --black: #000000;
       --near-black: #1d1d1f;
       --grey: #86868b;
       --accent: #0071e3;
-      --radius: 30px;
+      --radius-pro: 32px;
     }
 
     * { box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
     
     body {
       background-color: var(--white);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
       color: var(--near-black);
       overflow-x: hidden;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
-    /* --- REFINED LIQUID SPLASH --- */
-    #loading-screen {
+    /* --- LIQUID STARTUP (Flutter-Style) --- */
+    #startup-screen {
       position: fixed; inset: 0; background: var(--white); z-index: 10000;
       display: flex; align-items: center; justify-content: center;
-      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
     }
-    .liquid-loader {
-      filter: url('#liquid-goo'); display: flex; align-items: center; justify-content: center;
+    .liquid-goo { filter: url('#goo-filter'); display: flex; align-items: center; justify-content: center; }
+    .goo-ball {
+      position: absolute; width: 100px; height: 100px; background: var(--black);
+      border-radius: 50%; animation: goo-glide 3.5s infinite ease-in-out;
     }
-    .liquid-circle {
-      position: absolute; width: 90px; height: 90px; background: var(--black);
-      border-radius: 50%; animation: liquid-glide 3s infinite ease-in-out;
+    .goo-ball:nth-child(2) { background: var(--accent); width: 80px; height: 80px; animation-delay: -1.7s; }
+    @keyframes goo-glide {
+      0%, 100% { transform: translate(0, 0) scale(1.1); }
+      50% { transform: translate(60px, -20px) scale(0.9); }
     }
-    .liquid-circle:nth-child(2) { background: var(--accent); width: 70px; height: 70px; animation-delay: -1.5s; }
-    
-    @keyframes liquid-glide {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(60px, -20px) scale(1.2); }
-    }
-    .loader-text { position: absolute; font-weight: 800; font-size: 28px; color: #fff; z-index: 11; mix-blend-mode: difference; letter-spacing: -1px; }
+    .startup-logo { position: absolute; font-weight: 800; font-size: 32px; color: #fff; z-index: 11; mix-blend-mode: difference; letter-spacing: -1.5px; }
 
-    body.ready #loading-screen { opacity: 0; visibility: hidden; }
+    body.ready #startup-screen { opacity: 0; visibility: hidden; }
 
-    /* --- NAVIGATION --- */
+    /* --- APPLE NAVIGATION --- */
     header {
       position: fixed; top: 0; width: 100%; z-index: 999;
       background: rgba(255, 255, 255, 0.8); backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 0.5px solid #d2d2d7;
     }
-    .nav-content { height: 54px; max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
-    .brand { font-weight: 700; font-size: 21px; letter-spacing: -0.04em; }
+    .nav-container { height: 52px; max-width: 1024px; margin: 0 auto; padding: 0 22px; display: flex; align-items: center; justify-content: space-between; }
+    .logo-link { font-weight: 700; font-size: 19px; letter-spacing: -0.04em; text-decoration: none; color: var(--near-black); }
+    .nav-links a { color: var(--grey); text-decoration: none; font-size: 13px; margin-left: 24px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
 
     /* --- HERO --- */
-    .hero-box { padding: 160px 24px 80px; text-align: center; max-width: 900px; margin: 0 auto; }
-    .hero-box h1 { font-size: clamp(48px, 8vw, 80px); font-weight: 700; letter-spacing: -0.05em; line-height: 1.05; margin-bottom: 24px; }
-    .hero-box p { font-size: clamp(20px, 2.5vw, 24px); color: var(--grey); line-height: 1.4; margin-bottom: 44px; }
+    .hero { padding: 140px 22px 60px; text-align: center; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: clamp(48px, 8vw, 82px); font-weight: 700; letter-spacing: -0.05em; line-height: 1; margin-bottom: 24px; }
+    .hero p { font-size: clamp(20px, 3vw, 24px); color: var(--grey); line-height: 1.3; margin-bottom: 40px; font-weight: 400; }
     
-    .btn-main { background: var(--black); color: var(--white); text-decoration: none; padding: 16px 36px; border-radius: 100px; font-weight: 600; font-size: 18px; transition: 0.2s; display: inline-block; }
-    .btn-main:hover { transform: scale(1.02); }
+    .btn-cta { background: var(--black); color: var(--white); text-decoration: none; padding: 16px 32px; border-radius: 980px; font-weight: 600; font-size: 17px; transition: 0.3s; display: inline-block; }
+    .btn-cta:hover { transform: scale(1.02); background: #333; }
 
-    /* --- PROFESSIONAL DEVICE PREVIEW --- */
-    .showcase { display: flex; justify-content: center; padding: 0 24px 120px; }
-    .device-shell {
-      width: 100%; max-width: 320px; aspect-ratio: 9/19; background: #000;
+    /* --- INTERACTIVE PRO PREVIEW --- */
+    .preview-canvas { display: flex; justify-content: center; padding-bottom: 100px; }
+    .device-mock {
+      width: 100%; max-width: 310px; aspect-ratio: 9/19; background: #000;
       border-radius: 54px; padding: 12px; position: relative;
-      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.3); border: 1px solid #333;
+      box-shadow: 0 50px 100px -20px rgba(0,0,0,0.25); border: 1.5px solid #333;
     }
-    .screen-container { width: 100%; height: 100%; background: #fff; border-radius: 42px; overflow: hidden; position: relative; }
+    .island-cap { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); width: 85px; height: 25px; background: #000; border-radius: 20px; z-index: 50; }
+    .device-screen { width: 100%; height: 100%; background: #fff; border-radius: 42px; overflow: hidden; position: relative; }
     
-    .img-layer { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .base-img { background: url('https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-bg.jpg') center/cover; }
-    .top-img { 
+    .img-wrap { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .img-bg { background: url('https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-bg.jpg') center/cover; }
+    .img-fg { 
       z-index: 2; clip-path: inset(0 0 0 50%); 
-      background: #fff radial-gradient(#d1d1d1 0.5px, transparent 0.5px) 0 0/14px 14px; 
+      background: white radial-gradient(#d1d1d1 0.5px, transparent 0.5px) 0 0/14px 14px;
     }
-    .top-img img { width: 100%; height: 100%; object-fit: cover; }
+    .img-fg img { width: 100%; height: 100%; object-fit: cover; }
     
-    .slider-divider { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: #fff; z-index: 10; }
-    .slider-input { position: absolute; inset: 0; opacity: 0; z-index: 20; cursor: ew-resize; width: 100%; height: 100%; }
+    .slider-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: #fff; z-index: 10; pointer-events: none; }
+    .range-input { position: absolute; inset: 0; opacity: 0; z-index: 60; cursor: ew-resize; width: 100%; height: 100%; }
 
-    /* --- BENTO INFORMATION GRID --- */
-    .bento-section { max-width: 1100px; margin: 0 auto 100px; padding: 0 24px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
-    .bento-tile { background: var(--app-bg); border-radius: var(--radius); padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; }
-    .tile-wide { grid-column: span 12; padding: 60px; }
-    .tile-mid { grid-column: span 8; height: 350px; }
-    .tile-small { grid-column: span 4; background: var(--black); color: #fff; }
-    .bento-tile h3 { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
-    .bento-tile p { color: var(--grey); font-size: 17px; line-height: 1.4; }
+    /* --- DECORATIVE BENTO FEATURES --- */
+    .bento-grid { max-width: 1100px; margin: 0 auto 100px; padding: 0 24px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+    .bento-card { background: var(--app-bg); border-radius: var(--radius-pro); padding: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; transition: transform 0.4s ease; border: 1px solid rgba(0,0,0,0.03); }
+    
+    .card-privacy { grid-column: span 7; height: 400px; }
+    .card-offline { grid-column: span 5; background: var(--near-black); color: #fff; }
+    .card-quality { grid-column: span 12; padding: 100px 60px; text-align: center; align-items: center; }
 
-    /* --- PROFESSIONAL CONTENT (1000+ Words) --- */
-    .long-content { max-width: 800px; margin: 0 auto; padding: 0 24px 100px; }
-    .long-content h2 { font-size: 42px; font-weight: 700; margin: 80px 0 24px; letter-spacing: -0.03em; }
-    .long-content p { font-size: 20px; color: var(--near-black); margin-bottom: 30px; line-height: 1.7; }
-    .long-content strong { font-weight: 600; color: var(--black); }
+    .bento-card h3 { font-size: 28px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; z-index: 2; }
+    .bento-card p { color: var(--grey); font-size: 18px; line-height: 1.4; max-width: 500px; z-index: 2; }
 
-    footer { padding: 100px 24px; text-align: center; border-top: 1px solid #eee; }
+    /* Decorative Elements */
+    .shield-aura { position: absolute; top: -50px; right: -50px; width: 300px; height: 300px; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.1; }
+    .no-signal-icon { position: absolute; top: 40px; right: 40px; width: 60px; height: 60px; border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; display: grid; place-items: center; font-size: 24px; color: var(--accent); }
+    .lens-decor { position: absolute; inset: 0; background: url('https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-subject.jpg') center/cover; opacity: 0.05; filter: grayscale(1); }
 
-    @media (max-width: 850px) {
-      .tile-mid, .tile-small { grid-column: span 12; height: auto; }
-      .hero-box h1 { font-size: 42px; }
-    }
+    /* --- TECHNICAL ARTICLE (SEO CONTENT) --- */
+    .seo-article { max-width: 800px; margin: 0 auto; padding: 0 24px 120px; }
+    .seo-article h2 { font-size: 44px; font-weight: 700; margin: 80px 0 24px; letter-spacing: -0.04em; }
+    .seo-article p { font-size: 20px; color: var(--near-black); margin-bottom: 30px; line-height: 1.7; font-weight: 400; }
+    .seo-article strong { font-weight: 600; }
+
+    footer { padding: 100px 24px; text-align: center; border-top: 1px solid #eee; background: var(--app-bg); }
+
+    @media (max-width: 850px) { .card-privacy, .card-offline { grid-column: span 12; height: auto; } .hero h1 { font-size: 42px; } }
   </style>
 </head>
 <body>
 
-  <!-- Liquid Loader -->
-  <div id="loading-screen">
-    <div class="liquid-loader">
-      <div class="liquid-circle"></div>
-      <div class="liquid-circle"></div>
-      <div class="loader-text">VapurCut</div>
+  <!-- Startup Screen -->
+  <div id="startup-screen">
+    <div class="liquid-goo">
+      <div class="goo-ball"></div>
+      <div class="goo-ball"></div>
+      <div class="startup-logo">VapurCut</div>
     </div>
   </div>
 
   <svg style="display:none;">
-    <filter id="liquid-goo">
+    <filter id="goo-filter">
       <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
       <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
     </filter>
   </svg>
 
   <header>
-    <div class="nav-content">
-      <div class="brand">VapurCut</div>
-      <a href="#" class="btn-main" style="padding: 8px 18px; font-size: 14px;">Install App</a>
+    <div class="nav-container">
+      <a href="https://soumyadeb-git.github.io/vapurcut/" class="logo-link">VapurCut</a>
+      <nav class="nav-links">
+        <a href="#features">Process</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#" class="btn-cta" style="padding: 8px 16px; font-size: 13px;">Download</a>
+      </nav>
     </div>
   </header>
 
   <main>
-    <section class="hero-box">
-      <h1>The new standard for private editing.</h1>
-      <p>Remove backgrounds offline with private on-device AI. Fast, secure, and professional-grade results.</p>
-      <a href="#" class="btn-main">Download on Google Play</a>
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Private background removal. Instant results.</h1>
+      <p>Powerful on-device AI for professional image isolation. No uploads, no clouds, just pure computational intelligence.</p>
+      <a href="#" class="btn-cta">Get VapurCut on Google Play</a>
     </section>
 
-    <!-- App Preview Comparison -->
-    <section class="showcase">
-      <div class="device-shell">
-        <div class="screen-container">
-          <div class="comp-box">
-            <div class="img-layer base-img"></div>
-            <div class="img-layer top-img" id="img-after">
-              <img src="https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-subject.jpg" alt="Subject">
+    <!-- App Showcase -->
+    <section class="preview-canvas">
+      <div class="device-mock">
+        <div class="island-cap"></div>
+        <div class="device-screen">
+          <div class="comp-box" style="width:100%; height:100%; position:relative;">
+            <div class="img-wrap img-bg"></div>
+            <div class="img-wrap img-fg" id="subject-layer">
+              <img src="https://raw.githubusercontent.com/soumyadeb-git/vapurcut/d4bc335b0a895526ebba0a46830b54493bfbe1f7/assets/demo-subject.jpg" alt="Transparent background result">
             </div>
-            <div class="slider-divider" id="divider-bar"></div>
-            <input type="range" min="0" max="100" value="50" class="slider-input" id="control-input">
+            <div class="slider-handle" id="divider-line"></div>
+            <input type="range" min="0" max="100" value="50" class="range-input" id="ui-control">
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Key Features Bento -->
-    <section class="bento-section">
-      <div class="bento-tile tile-mid">
+    <!-- Decorative Features Grid -->
+    <section id="features" class="bento-grid">
+      <!-- Privacy Decorative -->
+      <div class="bento-card card-privacy" id="privacy">
+        <div class="shield-aura"></div>
+        <div style="font-size:48px; margin-bottom: 20px;">🔒</div>
         <h3>Privacy First. Always.</h3>
-        <p>Your photos are processed locally on your phone's Neural Processing Unit. We don't have servers, so your data never leaves your device.</p>
+        <p>Your photos are processed in an encrypted local sandbox. VapurCut utilizes your phone's NPU, ensuring that not a single byte of your visual data ever touches a cloud server.</p>
       </div>
-      <div class="bento-tile tile-small">
+
+      <!-- Offline Decorative -->
+      <div class="bento-card card-offline">
+        <div class="no-signal-icon">📡</div>
         <h3>100% Offline</h3>
-        <p>Edit in the air or in remote areas. No data required.</p>
+        <p>Zero internet latency. Remove backgrounds in flight, in remote rural areas, or anywhere without a data connection. Truly independent editing.</p>
       </div>
-      <div class="bento-tile tile-wide">
-        <h3>Superior Edge Quality</h3>
-        <p>VapurCut handles complex subjects like hair, fur, and semi-transparent objects with advanced feathering algorithms previously only available on desktop software.</p>
+
+      <!-- Quality Decorative -->
+      <div class="bento-card card-quality">
+        <div class="lens-decor"></div>
+        <div style="z-index:10;">
+          <h3>Superior Edge Quality</h3>
+          <p style="margin-bottom:30px;">Our proprietary AI segmentation technology handles the most difficult subjects—including hair, fur, and semi-transparent objects—with surgical precision.</p>
+          <div style="display:flex; justify-content:center; gap:20px; font-size:14px; font-weight:700; color:var(--accent);">
+            <span>SHARP DETECT</span> • <span>NATURAL FEATHER</span> • <span>32-BIT OUTPUT</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Deep Dive Article Content -->
-    <article class="long-content">
-      <h2>The Revolution of On-Device Intelligence</h2>
-      <p>In the modern age of photo editing, convenience often comes at the cost of privacy. Most background removal tools available today are built on "Cloud-First" architectures. When you upload an image, it is sent to a remote server, processed by a third-party company, and potentially stored for training data. <strong>VapurCut is built to end this compromise.</strong></p>
+    <!-- SEO Optimized Long-form Narrative (1,000+ Words) -->
+    <article class="seo-article">
+      <h2>The Evolution of On-Device Intelligence</h2>
+      <p>In the contemporary landscape of mobile application development, **VapurCut** redefines the boundaries of what a handheld device can achieve. While traditional background removal tools rely on energy-intensive cloud uploads, VapurCut utilizes the specialized Neural Processing Units (NPU) of modern Android chipsets. This shift from cloud to local device is not merely a convenience; it is a fundamental pillar of user sovereignty.</p>
 
-      <p>By shifting the computational load from massive data centers directly to the hardware in your pocket, VapurCut represents the next generation of mobile software. We utilize the specialized AI cores found in modern Android chipsets to run complex semantic segmentation neural networks. This means your private photos stay private, and your editing remains instantaneous.</p>
+      <p>Every pixel of your image is analyzed locally. By leveraging high-precision semantic segmentation models, VapurCut identifies subjects with an accuracy that rivals professional desktop software. Whether you're an e-commerce seller capturing product shots or a creator designing social media assets, the results are instantaneous and studio-grade.</p>
 
-      <h2>Professional Power for Every Creator</h2>
-      <p>Whether you are an e-commerce seller looking for a crisp product cutout or a content creator designing a high-impact thumbnail, the quality of the "cut" is what matters most. Legacy background removers often produce jagged, pixelated edges that look amateur. VapurCut solves this through deep-learning-based edge refinement. Our AI doesn't just look for color differences; it understands the subject, allowing it to preserve fine details like individual strands of hair or the delicate texture of fabrics.</p>
+      <h2>The Ethics of Data Sovereignty in Photo Editing</h2>
+      <p>We believe that your digital footprint should be under your total control. Most "free" background removers monetize your data by training their AI on your private photos. VapurCut is different. We do not have servers to hack, and we do not have a database of your images. Our business model is centered on providing a premium, secure utility for those who refuse to compromise on privacy.</p>
 
-      <p>The speed of VapurCut is another pillar of its professional utility. By removing the need for a network round-trip (Upload-Process-Download), you can process dozens of images in the time it takes a cloud-based tool to handle just one. For professionals handling high volumes of photography, this is a productivity multiplier.</p>
+      <p>This commitment to ethics is paired with technical mastery. Our AI models are quantized for mobile efficiency, ensuring that high-speed processing doesn't come at the cost of battery life. This optimization allows VapurCut to run seamlessly on a vast spectrum of Android hardware, from budget-friendly devices to the latest flagship models.</p>
 
-      <h2>The Ethics of Zero-Tracking Software</h2>
-      <p>We believe that "free" tools shouldn't mean your data is the product. VapurCut is developed with a strict no-analytics, no-tracking policy. We do not require account sign-ups because we do not need to know who you are to help you edit your photos. Our business model is focused solely on providing a premium utility that respects user sovereignty.</p>
+      <h2>Designed for the Modern Creative Workflow</h2>
+      <p>Speed is the ultimate luxury for modern creators. By eliminating the upload/download cycle, VapurCut allows you to process dozens of images in the time it would take a web-based tool to handle just one. For professionals handling high volumes of photography, this is a productivity multiplier. The output is a clean, 32-bit transparent PNG, ready to be imported into Canva, Figma, or any design platform of your choice.</p>
 
-      <p>Our commitment to privacy extends to the permissions we request. VapurCut only asks for access to your storage so you can select your photos and save the results. We do not track your location, your device ID, or your usage habits. In a digital world where everything is monitored, VapurCut remains a private sanctuary for your creativity.</p>
+      <p>The "Fully Offline" capability ensures that your creative flow is never interrupted. Whether you're on an international flight or in a basement studio with poor reception, VapurCut is ready. This is the hallmark of a "Pro" tool: it works whenever and wherever you do.</p>
 
-      <h2>The Technical Edge: Tensor-Optimized Models</h2>
-      <p>Achieving desktop-level background removal on a mobile device required intense engineering. Our models are quantized and optimized for the TensorFlow Lite framework, ensuring they run efficiently without draining your battery. We support a wide range of hardware, ensuring that users with budget-friendly devices still experience high-quality results, while those with flagship devices benefit from sub-second processing speeds.</p>
+      <h2>Technical Superiority: Semantic Edge Refinement</h2>
+      <p>The difference between a good cutout and a great one lies in the edges. VapurCut's AI uses advanced alpha-channel refinement to ensure that hair, fur, and delicate edges are preserved with natural-looking transparency. This level of detail ensures that your subject looks natural against any new background, avoiding the "halo" effect common in lesser tools.</p>
 
-      <p>The "Fully Offline" capability is not just a privacy feature—it’s a reliability feature. In professional settings—from outdoor photo shoots to international flights—internet access is never guaranteed. Having a professional-grade tool that functions in airplane mode ensures that your creative flow is never interrupted by a dropped connection or a server outage.</p>
+      <p>Our algorithm is trained on millions of diverse image pairs, allowing it to understand the geometry of humans, animals, and inanimate objects. This deep understanding enables the AI to apply "Soft-Feathering" precisely where needed, maintaining sharpness on hard edges while softening transitions on organic subjects.</p>
 
-      <h2>Why Choose VapurCut?</h2>
-      <p>VapurCut is more than an app; it is a statement about how software should work in the 21st century. It combines the ease of use expected of a mobile app with the privacy standards of a closed-circuit system. By downloading VapurCut, you are supporting a future where AI serves the user without exploiting their data.</p>
+      <h2>The Offline Advantage: Beyond Privacy</h2>
+      <p>While privacy is our main focus, the offline nature of VapurCut offers practical benefits that cloud tools cannot match. Users in regions with expensive data plans or unreliable infrastructure can edit their content without fear of interruption. Furthermore, the lack of network dependency means the app is immune to server outages, providing a 100% uptime guarantee for your editing workflow.</p>
+
+      <p>Join the movement toward a faster, safer, and more professional mobile editing experience. Download VapurCut and discover why creators worldwide trust us to handle their backgrounds with total privacy and unmatched precision.</p>
     </article>
   </main>
 
   <footer>
     <div style="max-width:1100px; margin:0 auto; color:var(--grey); font-size:14px;">
-      <p>© 2026 VapurCut – Private Background Remover. Designed for Privacy.</p>
+      <p>© 2026 VapurCut • Privacy First. Designed for Android.</p>
       <div style="margin-top:20px; display:flex; gap:20px; justify-content:center;">
-        <a href="#" style="color:inherit; text-decoration:none;">Privacy Policy</a>
-        <a href="#" style="color:inherit; text-decoration:none;">Support</a>
+        <a href="privacy-policy.html" style="color:inherit; text-decoration:none; font-weight:600;">Privacy Policy</a>
+        <a href="#" style="color:inherit; text-decoration:none; font-weight:600;">Support</a>
       </div>
     </div>
   </footer>
 
   <script>
-    // Slider Logic
-    const sliderInput = document.getElementById('control-input');
-    const afterImg = document.getElementById('img-after');
-    const bar = document.getElementById('divider-bar');
+    const uiRange = document.getElementById('ui-control');
+    const fgLayer = document.getElementById('subject-layer');
+    const dragBar = document.getElementById('divider-line');
 
-    sliderInput.addEventListener('input', (e) => {
+    uiRange.addEventListener('input', (e) => {
       const v = e.target.value;
-      afterImg.style.clipPath = `inset(0 0 0 ${v}%)`;
-      bar.style.left = `${v}%`;
+      fgLayer.style.clipPath = `inset(0 0 0 ${v}%)`;
+      dragBar.style.left = `${v}%`;
     });
 
-    // Page Reveal Logic
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.body.classList.add('ready');
         
-        // Help hint animation
+        // Interactivity hint
         setTimeout(() => {
-            afterImg.style.transition = 'clip-path 1.4s ease-in-out';
-            bar.style.transition = 'left 1.4s ease-in-out';
-            afterImg.style.clipPath = `inset(0 0 0 35%)`;
-            bar.style.left = `35%`;
-            setTimeout(() => {
-                afterImg.style.transition = 'none';
-                bar.style.transition = 'none';
-            }, 1400);
-        }, 1000);
+          fgLayer.style.transition = 'clip-path 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+          dragBar.style.transition = 'left 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+          fgLayer.style.clipPath = `inset(0 0 0 35%)`;
+          dragBar.style.left = `35%`;
+          
+          setTimeout(() => {
+            fgLayer.style.transition = 'none';
+            dragBar.style.transition = 'none';
+          }, 1500);
+        }, 1200);
       }, 2000);
     });
   </script>
