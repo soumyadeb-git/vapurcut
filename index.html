@@ -1,141 +1,324 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VapurCut – AI Background Remover</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VapurCut — Private Background Remover</title>
 
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-                   Arial, sans-serif;
-      background-color: #f5f5f7;
-      color: #1c1c1e;
-      margin: 0;
-      padding: 0;
-    }
+<meta name="description" content="VapurCut removes photo backgrounds entirely on-device. No uploads, no tracking, privacy-first.">
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 32px 20px 60px;
-    }
+<style>
+:root{
+  --bg:#f5f5f7;
+  --surface:#ffffff;
+  --text:#1c1c1e;
+  --muted:#6e6e73;
+  --primary:#0a84ff;
+  --radius-xl:32px;
+  --radius-lg:22px;
+  --radius-md:16px;
+  --shadow-lg:0 30px 60px rgba(0,0,0,.12);
+  --shadow-md:0 16px 30px rgba(0,0,0,.08);
+  --ease:cubic-bezier(.2,.9,.17,1);
+}
 
-    header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
+*{box-sizing:border-box}
 
-    h1 {
-      font-size: 34px;
-      margin-bottom: 8px;
-      letter-spacing: -1px;
-    }
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;
+  background:linear-gradient(180deg,#fafafa,#f1f1f4);
+  color:var(--text);
+}
 
-    .subtitle {
-      font-size: 16px;
-      color: #6e6e73;
-    }
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:28px 22px 64px;
+}
 
-    section {
-      margin-bottom: 40px;
-    }
+/* ---------------- HEADER ---------------- */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:28px;
+}
 
-    h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
-    p, li {
-      font-size: 15px;
-      line-height: 1.6;
-      color: #3a3a3c;
-    }
+.logo{
+  width:42px;height:42px;
+  border-radius:10px;
+  background:linear-gradient(180deg,#fff,#f1f1f4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
 
-    ul {
-      padding-left: 20px;
-    }
+.brand-name{font-size:18px;font-weight:700}
+.brand-sub{font-size:13px;color:var(--muted)}
 
-    a {
-      color: #007aff;
-      text-decoration: none;
-      font-weight: 500;
-    }
+header a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+}
 
-    a:hover {
-      text-decoration: underline;
-    }
+/* ---------------- HERO ---------------- */
+.hero{
+  display:grid;
+  grid-template-columns:1fr 440px;
+  gap:34px;
+  align-items:center;
+}
 
-    footer {
-      text-align: center;
-      font-size: 13px;
-      color: #8e8e93;
-      margin-top: 60px;
-    }
-  </style>
+h1{
+  font-size:36px;
+  font-weight:800;
+  letter-spacing:-1px;
+  margin:0 0 12px;
+}
+
+.subtitle{
+  color:var(--muted);
+  font-size:16px;
+  max-width:640px;
+  margin-bottom:24px;
+}
+
+.btn-row{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.btn{
+  padding:12px 18px;
+  border-radius:14px;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+  transition:transform .15s var(--ease),box-shadow .15s var(--ease);
+}
+
+.btn.primary{
+  background:var(--primary);
+  color:#fff;
+  box-shadow:0 10px 24px rgba(10,132,255,.25);
+}
+
+.btn.secondary{
+  background:#ededf0;
+}
+
+.btn:active{transform:scale(.97)}
+
+/* ---------------- DEMO ---------------- */
+.demo-card{
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(12px);
+  border-radius:var(--radius-xl);
+  padding:16px;
+  box-shadow:var(--shadow-lg);
+}
+
+.demo-frame{
+  position:relative;
+  height:270px;
+  border-radius:18px;
+  overflow:hidden;
+  background:#e9e9ef;
+}
+
+/* Background image */
+.demo-bg{
+  position:absolute;
+  inset:0;
+  background:url("assets/demo-bg.jpg") center/cover no-repeat;
+}
+
+/* Subject cutout */
+.demo-subject{
+  position:absolute;
+  inset:0;
+  background:url("assets/demo-subject.png") center/contain no-repeat;
+  z-index:2;
+}
+
+/* Mask simulating background removal */
+.demo-mask{
+  position:absolute;
+  inset:0;
+  background:#ffffff;
+  z-index:1;
+  clip-path:inset(0 100% 0 0);
+  transition:clip-path 520ms cubic-bezier(.2,.9,.17,1);
+}
+
+.demo-controls{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:14px;
+}
+
+.demo-controls input{
+  flex:1;
+}
+
+.demo-label{
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* ---------------- FEATURES ---------------- */
+.features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:42px;
+}
+
+.card{
+  background:var(--surface);
+  border-radius:var(--radius-lg);
+  padding:18px;
+  box-shadow:var(--shadow-md);
+}
+
+.card h3{
+  margin:0 0 6px;
+  font-size:16px;
+}
+
+.card p{
+  margin:0;
+  font-size:14px;
+  color:var(--muted);
+}
+
+/* ---------------- FOOTER ---------------- */
+footer{
+  margin-top:54px;
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr}
+}
+
+@media(max-width:680px){
+  h1{font-size:28px}
+  .features{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
-  <div class="container">
+<div class="container">
 
-    <!-- HEADER -->
-    <header>
-      <h1>VapurCut</h1>
-      <div class="subtitle">
-        On-device AI background remover for photos
-      </div>
-    </header>
-
-    <!-- ABOUT -->
-    <section>
-      <h2>About VapurCut</h2>
-      <p>
-        VapurCut is a lightweight mobile app that removes photo backgrounds using
-        on-device AI. All image processing happens directly on your device —
-        no uploads, no servers, and no data sharing.
-      </p>
-    </section>
-
-    <!-- FEATURES -->
-    <section>
-      <h2>Key Features</h2>
-      <ul>
-        <li>AI-powered background removal</li>
-        <li>Fully on-device processing</li>
-        <li>No account or login required</li>
-        <li>Fast and privacy-focused</li>
-        <li>Works offline after install</li>
-      </ul>
-    </section>
-
-    <!-- PRIVACY -->
-    <section>
-      <h2>Privacy</h2>
-      <p>
-        Your photos never leave your device.
-        Read our full privacy policy here:
-      </p>
-      <p>
-        <a href="privacy-policy.html">View Privacy Policy</a>
-      </p>
-    </section>
-
-    <!-- CONTACT -->
-    <section>
-      <h2>Contact</h2>
-      <p>
-        If you have questions or feedback, contact:
-      </p>
-      <p>
-        <strong>Email:</strong> service.soumyadeb@gmail.com
-      </p>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-      © 2026 VapurCut. All rights reserved.
-    </footer>
-
+<header>
+  <div class="brand">
+    <div class="logo">VC</div>
+    <div>
+      <div class="brand-name">VapurCut</div>
+      <div class="brand-sub">On-device background remover</div>
+    </div>
   </div>
+  <a href="privacy-policy.html">Privacy</a>
+</header>
+
+<section class="hero">
+
+<!-- LEFT CONTENT -->
+<div>
+  <h1>Remove backgrounds.<br>Private by design.</h1>
+  <p class="subtitle">
+    VapurCut removes photo backgrounds entirely on your device.
+    No uploads, no accounts, no tracking.
+  </p>
+
+  <div class="btn-row">
+    <button class="btn primary" onclick="runDemo()">Remove Background</button>
+    <button class="btn secondary">Get the App</button>
+  </div>
+</div>
+
+<!-- RIGHT DEMO -->
+<div class="demo-card">
+  <div class="demo-frame">
+    <div class="demo-bg"></div>
+    <div class="demo-mask" id="demoMask"></div>
+    <div class="demo-subject"></div>
+  </div>
+
+  <div class="demo-controls">
+    <input type="range" min="0" max="100" value="0"
+           oninput="updateDemo(this.value)"
+           aria-label="Preview background removal">
+    <span class="demo-label">Preview</span>
+  </div>
+</div>
+
+</section>
+
+<section class="features">
+  <div class="card">
+    <h3>On-device AI</h3>
+    <p>All image processing happens locally using ML Kit.</p>
+  </div>
+  <div class="card">
+    <h3>Smooth edges</h3>
+    <p>Feathered alpha avoids harsh, boxy cutouts.</p>
+  </div>
+  <div class="card">
+    <h3>Instant export</h3>
+    <p>Save transparent PNGs directly to your device.</p>
+  </div>
+</section>
+
+<footer>
+  © 2026 VapurCut · <a href="privacy-policy.html">Privacy Policy</a>
+</footer>
+
+</div>
+
+<script>
+const demoMask = document.getElementById("demoMask");
+
+function updateDemo(val){
+  demoMask.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
+}
+
+/* Subtle autoplay once (Apple-style) */
+window.addEventListener("load", () => {
+  let v = 0;
+  const t = setInterval(() => {
+    v += 1.2;
+    updateDemo(v);
+    if (v >= 100) clearInterval(t);
+  }, 16);
+});
+
+function runDemo(){
+  let v = 0;
+  const t = setInterval(() => {
+    v += 2;
+    updateDemo(v);
+    if (v >= 100) clearInterval(t);
+  }, 16);
+}
+</script>
+
 </body>
 </html>
